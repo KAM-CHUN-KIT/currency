@@ -11,25 +11,31 @@ import io.reactivex.disposables.Disposable
 class RevCurrencyViewModel: ViewModel() {
 
     val currency = MutableLiveData<Currency>()
-
     private val currencylistRepository = RevCurrencyRepository()
     private var resultDisposable: Disposable? = null
+
+    private var runnable: Runnable? = null
+    private var handler: Handler? = null
+
+    init {
+        handler = Handler()
+    }
 
     override fun onCleared() {
         super.onCleared()
         resultDisposable?.dispose() // to prevent memory leak
+        handler?.removeCallbacks(runnable)
     }
 
     fun startRunnable() {
-        val handler = Handler()
-        val runnableCode = object: Runnable {
+        runnable = object: Runnable {
             override fun run() {
-                handler.postDelayed(this, 1000)
+                handler?.postDelayed(this, 1000)
                 //should kill pending call in the queue
                 getLatest(CurrencyType.EUR)
             }
         }
-        runnableCode.run()
+        runnable?.run()
     }
 
     fun getLatest(currencyKey: CurrencyType) {
