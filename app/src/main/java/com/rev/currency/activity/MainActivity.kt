@@ -4,7 +4,6 @@ import android.os.Bundle
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.rev.currency.R
-import com.rev.currency.rate.model.CurrencyType
 import com.rev.currency.rate.viewmodel.RevCurrencyViewModel
 import kotlinx.android.synthetic.main.activity_main.*
 
