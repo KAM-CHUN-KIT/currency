@@ -1,24 +1,55 @@
+buildscript {
+    repositories {
+        google()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:3.5.3'
+    }
+    repositories {
+        jcenter()
+    }
+    repositories {
+        maven { url 'https://plugins.gradle.org/m2/' }
+    }
+}
+
 apply plugin: 'com.android.application'
 
 apply plugin: 'kotlin-android'
 
 apply plugin: 'kotlin-android-extensions'
 
+apply plugin: 'kotlin-kapt'
+
 android {
     compileSdkVersion 29
     buildToolsVersion "29.0.2"
     defaultConfig {
         applicationId "com.rev.currency"
-        minSdkVersion 15
+        minSdkVersion 23
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
+
+    flavorDimensions "default"
     buildTypes {
         release {
             minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    productFlavors {
+        dev {
+            applicationId "com.rev.currency.dev"
+            resValue "string", "app_name", "Currency Dev"
+            resValue "string", "base_url", "https://revolut.duckdns.org"
+        }
+        prod {
+            applicationId "com.rev.currency"
+            resValue "string", "app_name", "Currency"
+            resValue "string", "base_url", "https://revolut.duckdns.org"
         }
     }
 }
@@ -32,4 +63,23 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+
+    /* Android DI Library */
+    kapt 'com.google.dagger:dagger-compiler:2.16'
+    implementation 'com.google.dagger:dagger:2.16'
+
+    /* Android MultiDex Library */
+    implementation 'androidx.multidex:multidex:2.0.1'
+
+    /* Network Library - Fuel */
+    implementation 'com.github.kittinunf.fuel:fuel:2.2.1'
+    implementation 'com.github.kittinunf.fuel:fuel-android:2.2.1'
+    implementation 'com.github.kittinunf.fuel:fuel-livedata:2.2.1'
+    implementation 'com.github.kittinunf.fuel:fuel-rxjava:2.2.1'
+
+    implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
+    implementation 'io.reactivex:rxandroid:1.2.1'
+
+    /* Gson Library */
+    implementation 'com.google.code.gson:gson:2.8.6'
 }
