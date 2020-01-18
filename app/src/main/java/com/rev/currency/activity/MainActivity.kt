@@ -24,7 +24,7 @@ class MainActivity : RevBaseActivity() {
     }
 
     private fun fetchData(){
-        viewModel.getLatest(CurrencyType.EUR)
+        viewModel.startRunnable()
         viewModel.currency.observe(this, Observer {
             text.text = it?.base
         })
