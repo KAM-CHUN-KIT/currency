@@ -4,8 +4,17 @@ import java.math.BigDecimal
 
 data class ExchangeRateItem(val currency: CurrencyType,
                             var rate: BigDecimal,
-                            var input: String? = null) {
+                            var calculatedPrice: BigDecimal? = null) {
 
     val displayPrice: String
-        get() = input ?: rate.toPlainString()
+        get() {
+            calculatedPrice?.let {
+                if (it.compareTo(BigDecimal.ZERO) > 0) {
+                    return it.toPlainString()
+                } else {
+                    return ""
+                }
+            }
+            return rate.toPlainString()
+        }
 }

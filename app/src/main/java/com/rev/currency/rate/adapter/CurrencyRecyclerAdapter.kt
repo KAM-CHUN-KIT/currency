@@ -40,24 +40,27 @@ class CurrencyRecyclerAdapter(private var currencies: MutableList<ExchangeRateIt
         init {
             v.setOnClickListener(moveToTop())
 
+            //only get first item input text
             editTextPrice?.addTextChangedListener(object : TextWatcher {
                 override fun afterTextChanged(p0: Editable?) {
+                    if (layoutPosition == 0) { // afterTextChanged also be triggered when editText setText, simply guard check position index in here
+                        listener.onPriceInput(currencies[layoutPosition].currency, p0.toString())
+                    }
                 }
 
                 override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 }
 
                 override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                    listener.onPriceInput(layoutPosition, p0.toString())
                 }
             })
 
-            editTextPrice.setOnFocusChangeListener { view, hasFocus ->
-                if (hasFocus) {
-                    val block = moveToTop()
-                    block(view)
-                }
-            }
+//            editTextPrice.setOnFocusChangeListener { view, hasFocus ->
+//                if (hasFocus) {
+//                    val block = moveToTop()
+//                    block(view)
+//                }
+//            }
         }
 
         private fun moveToTop(): (View) -> Unit = {
@@ -66,7 +69,7 @@ class CurrencyRecyclerAdapter(private var currencies: MutableList<ExchangeRateIt
                     currencies.add(0, it)
                 }
                 notifyItemMoved(currentPosition, 0)
-                listener.onItemMoved()
+                listener.onItemMoved(currencies)
             }
         }
     }

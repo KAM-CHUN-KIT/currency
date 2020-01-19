@@ -24,6 +24,7 @@ data class Currency(
 
     fun asCurrencyList(): MutableList<ExchangeRateItem>? {
         val list = mutableListOf<ExchangeRateItem>()
+        list.add(ExchangeRateItem(CurrencyType.EUR, BigDecimal.ONE))
         for ((key, value) in rates) {
             println("$key = $value")
             val rate = ExchangeRateItem(key, value)

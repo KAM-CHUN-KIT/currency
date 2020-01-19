@@ -1,6 +1,7 @@
 package com.rev.currency.activity
 
 import android.os.Bundle
+import android.os.Handler
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -9,6 +10,8 @@ import com.rev.currency.rate.adapter.CurrencyRecyclerAdapter
 import com.rev.currency.rate.viewmodel.RevCurrencyViewModel
 import kotlinx.android.synthetic.main.activity_main.*
 import com.rev.currency.rate.adapter.ICurrencyRecyclerAdapterListener
+import com.rev.currency.rate.model.CurrencyType
+import com.rev.currency.rate.model.ExchangeRateItem
 
 class MainActivity : RevBaseActivity(), ICurrencyRecyclerAdapterListener {
     private lateinit var viewModel: RevCurrencyViewModel
@@ -46,13 +49,17 @@ class MainActivity : RevBaseActivity(), ICurrencyRecyclerAdapterListener {
         })
     }
 
-    override fun onItemMoved() {
-        super.onItemMoved()
+    override fun onItemMoved(currencies: MutableList<ExchangeRateItem>) {
+        super.onItemMoved(currencies)
         currencyRecyclerView.scrollToPosition(0) //scroll to top
+        viewModel.reOrderCurrencyList(currencies)
     }
 
-    override fun onPriceInput(viewPosition: Int, input: String) {
-        super.onPriceInput(viewPosition, input)
-        println(String.format("Num %d view is inputting : %s", viewPosition, input))
+    override fun onPriceInput(base: CurrencyType, input: String) {
+        super.onPriceInput(base, input)
+        val r = Runnable {
+            viewModel.editCurrencyBasePrice(base, input)
+        }
+        Handler().postDelayed(r, 1000)
     }
 }

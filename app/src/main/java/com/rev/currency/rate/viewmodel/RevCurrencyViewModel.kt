@@ -2,6 +2,7 @@ package com.rev.currency.rate.viewmodel
 
 import android.os.Handler
 import androidx.lifecycle.*
+import com.rev.currency.Util.Calculator
 import com.rev.currency.rate.model.Currency
 import com.rev.currency.rate.model.CurrencyType
 import com.rev.currency.rate.model.ExchangeRateItem
@@ -46,14 +47,36 @@ class RevCurrencyViewModel: ViewModel() {
             currencyList.value?.let { rates ->
                 var list = mutableListOf<ExchangeRateItem>()
                 for (rate in rates) {
-                    val newRate = base.rates[rate.currency] ?: BigDecimal(0)
-                    val r = ExchangeRateItem(rate.currency, newRate, rate.input)
+                    val newRate = base.rates[rate.currency] ?: rate.rate
+                    val r = ExchangeRateItem(rate.currency, newRate, rate.calculatedPrice)
                     list.add(r)
                 }
                 currencyList.value = list
             }
         }
     }
+
+    fun reOrderCurrencyList(currencies: MutableList<ExchangeRateItem>) {
+        currencyList.value = currencies
+    }
+
+    fun editCurrencyBasePrice(base: CurrencyType, input: String) {
+
+        val currencyObject = currency.value?.takeIf { it != null } ?: Currency()
+        val exchangeRateMap = currencyObject.rates
+        val basePrice = if (input.isNotEmpty()) { BigDecimal(input) } else { BigDecimal.ZERO }
+        currencyList.value?.let { rates ->
+            var list = mutableListOf<ExchangeRateItem>()
+            for (rate in rates) {
+                val baseExchangeRate = exchangeRateMap[base] ?: BigDecimal.ONE //assume 1 if hashmap does not contain exchange rate e.g EUR
+                val calPrice = Calculator.calculateExchangeRate(baseExchangeRate, rate.rate).multiply(basePrice) //multiply input value
+                val r = ExchangeRateItem(rate.currency, rate.rate, calPrice)
+                list.add(r)
+            }
+            currencyList.value = list
+        }
+    }
+
 
     //API call
     private fun getLatest(currencyKey: CurrencyType) {
