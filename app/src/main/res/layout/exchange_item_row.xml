@@ -1,22 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
-        android:layout_width="match_parent" android:layout_height="100dp">
+        android:layout_width="match_parent" android:layout_height="72dp"
+        android:orientation="horizontal"
+        android:weightSum="2">
 
-    <TextView
-            android:id="@+id/text_currency"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"/>
+    <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
 
-    <EditText
-            android:id="@+id/edittext_price"
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:inputType="numberDecimal"
-            android:focusedByDefault="false"
-            android:hint="0"/>
-</RelativeLayout>
+        <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="20dp">
+
+            <ImageView
+                    android:id="@+id/image_currency"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_centerVertical="true"
+                    android:src="@mipmap/ic_launcher"/>
+
+            <TextView
+                    android:id="@+id/text_currency"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/image_currency"
+                    android:layout_marginLeft="9dp"
+                    android:textSize="16dp"
+                    android:textColor="@color/black"
+                    tools:text="EUR"/>
+            <TextView
+                    android:id="@+id/text_currency_alias"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/image_currency"
+                    android:layout_marginLeft="9dp"
+                    android:textSize="14dp"
+                    android:textColor="#8B959E"
+                    android:layout_below="@id/text_currency"
+                    tools:text="EURO"/>
+
+        </RelativeLayout>
+    </RelativeLayout>
+
+    <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+        <EditText
+                android:id="@+id/edittext_price"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="10dp"
+                android:textSize="20dp"
+                android:textColor="@color/colorPrimary"
+                android:inputType="numberDecimal"
+                android:focusedByDefault="false"
+                android:hint="0"
+                tools:text="1234.56"/>
+    </RelativeLayout>
+</LinearLayout>
