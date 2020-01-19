@@ -2,6 +2,7 @@ package com.rev.currency.rate.model
 
 import com.rev.currency.Util.Calculator
 import java.math.BigDecimal
+import java.math.RoundingMode
 
 data class ExchangeRateItem(val currency: CurrencyType,
                             var rate: BigDecimal,
@@ -12,12 +13,14 @@ data class ExchangeRateItem(val currency: CurrencyType,
         get() {
             calculatedPrice?.let {
                 if (it.compareTo(BigDecimal.ZERO) > 0) {
-                    return it.toPlainString()
+                    val output = it.setScale(2, RoundingMode.UP)
+                    return output.toString()
                 } else {
                     return ""
                 }
             }
-            return rate.toPlainString()
+            val outputRate = rate.setScale(2, RoundingMode.UP)
+            return outputRate.toString()
         }
 
     val calculatedPrice: BigDecimal?
