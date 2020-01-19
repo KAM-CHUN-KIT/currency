@@ -52,13 +52,13 @@ class MainActivity : RevBaseActivity(), ICurrencyRecyclerAdapterListener {
     override fun onItemMoved(currencies: MutableList<ExchangeRateItem>) {
         super.onItemMoved(currencies)
         currencyRecyclerView.scrollToPosition(0) //scroll to top
-        viewModel.reOrderCurrencyList(currencies)
+        viewModel.updateCurrencyListOrder(currencies)
     }
 
     override fun onPriceInput(base: CurrencyType, input: String) {
         super.onPriceInput(base, input)
         val r = Runnable {
-            viewModel.editCurrencyBasePrice(base, input)
+            viewModel.updateCurrencyBasePrice(base, input)
         }
         Handler().postDelayed(r, 1000)
     }

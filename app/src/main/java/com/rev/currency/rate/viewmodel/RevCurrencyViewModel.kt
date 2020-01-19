@@ -48,7 +48,7 @@ class RevCurrencyViewModel: ViewModel() {
                 var list = mutableListOf<ExchangeRateItem>()
                 for (rate in rates) {
                     val newRate = base.rates[rate.currency] ?: rate.rate
-                    val r = ExchangeRateItem(rate.currency, newRate, rate.calculatedPrice)
+                    val r = ExchangeRateItem(rate.currency, newRate, rate.baseExchangeRate, rate.basePrice)
                     list.add(r)
                 }
                 currencyList.value = list
@@ -56,11 +56,11 @@ class RevCurrencyViewModel: ViewModel() {
         }
     }
 
-    fun reOrderCurrencyList(currencies: MutableList<ExchangeRateItem>) {
+    fun updateCurrencyListOrder(currencies: MutableList<ExchangeRateItem>) {
         currencyList.value = currencies
     }
 
-    fun editCurrencyBasePrice(base: CurrencyType, input: String) {
+    fun updateCurrencyBasePrice(base: CurrencyType, input: String) {
 
         val currencyObject = currency.value?.takeIf { it != null } ?: Currency()
         val exchangeRateMap = currencyObject.rates
@@ -69,8 +69,7 @@ class RevCurrencyViewModel: ViewModel() {
             var list = mutableListOf<ExchangeRateItem>()
             for (rate in rates) {
                 val baseExchangeRate = exchangeRateMap[base] ?: BigDecimal.ONE //assume 1 if hashmap does not contain exchange rate e.g EUR
-                val calPrice = Calculator.calculateExchangeRate(baseExchangeRate, rate.rate).multiply(basePrice) //multiply input value
-                val r = ExchangeRateItem(rate.currency, rate.rate, calPrice)
+                val r = ExchangeRateItem(rate.currency, rate.rate, baseExchangeRate, basePrice)
                 list.add(r)
             }
             currencyList.value = list
