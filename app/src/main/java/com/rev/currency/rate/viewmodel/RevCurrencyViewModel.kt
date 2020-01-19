@@ -4,6 +4,7 @@ import android.os.Handler
 import androidx.lifecycle.*
 import com.rev.currency.rate.model.Currency
 import com.rev.currency.rate.model.CurrencyType
+import com.rev.currency.rate.model.Rate
 import com.rev.currency.repository.RevCurrencyRepository
 import io.reactivex.disposables.Disposable
 
@@ -11,6 +12,7 @@ import io.reactivex.disposables.Disposable
 class RevCurrencyViewModel: ViewModel() {
 
     val currency = MutableLiveData<Currency>()
+    var currencyList = MutableLiveData<MutableList<Rate>>()
     private val currencylistRepository = RevCurrencyRepository()
     private var resultDisposable: Disposable? = null
 
@@ -41,11 +43,16 @@ class RevCurrencyViewModel: ViewModel() {
     fun getLatest(currencyKey: CurrencyType) {
         resultDisposable = currencylistRepository.getLatest(currencyKey)?.subscribe { result ->
             val (data, err) = result
-            if (data != null) {
+            data?.let { data ->
                 print(data)
-                currency.value  = data
-            } else if(err != null){
+                currency.value = data
+                if (currencyList.value.isNullOrEmpty()) { //initialize currencyList
+                    currencyList.value = data.asCurrencyList()
+                }
+            }
 
+            err?.let {
+                //error handling
             }
             resultDisposable?.dispose()
         }
