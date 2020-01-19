@@ -22,11 +22,11 @@ data class Currency(
         }
     }
 
-    fun asCurrencyList(): MutableList<Rate>? {
-        val list = mutableListOf<Rate>()
+    fun asCurrencyList(): MutableList<ExchangeRateItem>? {
+        val list = mutableListOf<ExchangeRateItem>()
         for ((key, value) in rates) {
             println("$key = $value")
-            val rate = Rate(key, value)
+            val rate = ExchangeRateItem(key, value)
             list.add(rate)
         }
         return list
