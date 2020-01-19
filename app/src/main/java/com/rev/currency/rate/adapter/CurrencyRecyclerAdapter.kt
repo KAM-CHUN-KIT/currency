@@ -1,8 +1,10 @@
 package com.rev.currency.rate.adapter
 
+import android.os.Handler
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -23,6 +25,10 @@ class CurrencyRecyclerAdapter(private var currencies: MutableList<ExchangeRateIt
         val rate = currencies[position]
         holder?.textCurrency?.text = rate.currency.name
         holder?.editTextPrice?.text = Editable.Factory.getInstance().newEditable(rate.displayPrice)
+        holder?.editTextPrice?.isEnabled = position == 0
+        if (position == 0) {
+            holder?.editTextPrice?.requestFocus()
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CurrencyHolder {
@@ -41,7 +47,7 @@ class CurrencyRecyclerAdapter(private var currencies: MutableList<ExchangeRateIt
             v.setOnClickListener(moveToTop())
 
             //only get first item input text
-            editTextPrice?.addTextChangedListener(object : TextWatcher {
+            editTextPrice.addTextChangedListener(object : TextWatcher {
                 override fun afterTextChanged(p0: Editable?) {
                     if (layoutPosition == 0) { // afterTextChanged also be triggered when editText setText, simply guard check position index in here
                         listener.onPriceInput(currencies[layoutPosition].currency, p0.toString())
@@ -53,6 +59,14 @@ class CurrencyRecyclerAdapter(private var currencies: MutableList<ExchangeRateIt
 
                 override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 }
+            })
+
+            editTextPrice?.setOnKeyListener(View.OnKeyListener { v, keyCode, event ->
+                if (keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_UP) {
+                    //Perform Code
+                    return@OnKeyListener true
+                }
+                false
             })
 
 //            editTextPrice.setOnFocusChangeListener { view, hasFocus ->

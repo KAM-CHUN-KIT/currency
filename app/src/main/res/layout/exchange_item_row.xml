@@ -60,7 +60,8 @@
                 android:textSize="20dp"
                 android:textColor="@color/black"
                 android:inputType="numberDecimal"
-                android:focusedByDefault="false"
+                android:imeOptions="actionNone"
+                android:enabled="false"
                 android:hint="0"
                 tools:text="1234.56"/>
     </RelativeLayout>

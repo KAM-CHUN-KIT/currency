@@ -54,6 +54,7 @@ class MainActivity : RevBaseActivity(), ICurrencyRecyclerAdapterListener {
         super.onItemMoved(currencies)
         currencyRecyclerView.scrollToPosition(0) //scroll to top
         viewModel.updateCurrencyListOrder(currencies)
+        adapter.notifyItemChanged(0)
     }
 
     override fun onPriceInput(base: CurrencyType, input: String) {
