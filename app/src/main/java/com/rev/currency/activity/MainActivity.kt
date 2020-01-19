@@ -62,6 +62,6 @@ class MainActivity : RevBaseActivity(), ICurrencyRecyclerAdapterListener {
         val r = Runnable {
             viewModel.updateCurrencyBasePrice(base, input)
         }
-        Handler().postDelayed(r, 1000)
+        Handler().postDelayed(r, 200)
     }
 }

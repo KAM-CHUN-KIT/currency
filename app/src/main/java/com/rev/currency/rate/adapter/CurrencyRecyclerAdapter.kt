@@ -23,11 +23,12 @@ class CurrencyRecyclerAdapter(private var currencies: MutableList<ExchangeRateIt
 
     override fun onBindViewHolder(holder: CurrencyHolder, position: Int) {
         val rate = currencies[position]
-        holder?.textCurrency?.text = rate.currency.name
-        holder?.editTextPrice?.text = Editable.Factory.getInstance().newEditable(rate.displayPrice)
-        holder?.editTextPrice?.isEnabled = position == 0
+        holder.textCurrency.text = rate.currency.name
+        holder.textCurrecnyAlias.text = rate.currency.name //show dummy test as no alias from API side
+        holder.editTextPrice.text = Editable.Factory.getInstance().newEditable(rate.displayPrice)
+        holder.editTextPrice.isEnabled = position == 0
         if (position == 0) {
-            holder?.editTextPrice?.requestFocus()
+            holder.editTextPrice.requestFocus()
         }
     }
 
@@ -41,6 +42,7 @@ class CurrencyRecyclerAdapter(private var currencies: MutableList<ExchangeRateIt
 
     inner class CurrencyHolder(v: View) : RecyclerView.ViewHolder(v) {
         val textCurrency: TextView = v.findViewById(R.id.text_currency)
+        val textCurrecnyAlias: TextView = v.findViewById(R.id.text_currency_alias)
         val editTextPrice: EditText = v.findViewById(R.id.edittext_price)
 
         init {
@@ -69,12 +71,6 @@ class CurrencyRecyclerAdapter(private var currencies: MutableList<ExchangeRateIt
                 false
             })
 
-//            editTextPrice.setOnFocusChangeListener { view, hasFocus ->
-//                if (hasFocus) {
-//                    val block = moveToTop()
-//                    block(view)
-//                }
-//            }
         }
 
         private fun moveToTop(): (View) -> Unit = {
