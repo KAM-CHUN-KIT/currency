@@ -21,6 +21,7 @@ class MainActivity : RevBaseActivity(), ICurrencyRecyclerAdapterListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        supportActionBar?.elevation = 0F
         linearLayoutManager = LinearLayoutManager(this)
         currencyRecyclerView.layoutManager = linearLayoutManager
 
