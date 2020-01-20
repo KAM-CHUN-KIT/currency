@@ -11,13 +11,11 @@ import io.reactivex.disposables.Disposable
 import java.math.BigDecimal
 
 
-class RevCurrencyViewModel: ViewModel() {
+class RevCurrencyViewModel(private val currencylistRepository: RevCurrencyRepository = RevCurrencyRepository()): ViewModel() {
 
     val currency = MutableLiveData<Currency>()
     var currencyList = MutableLiveData<MutableList<ExchangeRateItem>>()
-    private val currencylistRepository = RevCurrencyRepository()
     private var resultDisposable: Disposable? = null
-
     private var runnable: Runnable? = null
     private var handler: Handler? = null
 

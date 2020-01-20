@@ -1,8 +1,9 @@
 package com.rev.currency.activity
 
 import android.os.Bundle
-import android.os.Handler
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.rev.currency.R
@@ -12,6 +13,9 @@ import kotlinx.android.synthetic.main.activity_main.*
 import com.rev.currency.rate.adapter.ICurrencyRecyclerAdapterListener
 import com.rev.currency.rate.model.CurrencyType
 import com.rev.currency.rate.model.ExchangeRateItem
+import java.lang.reflect.Constructor
+import com.rev.currency.repository.RevCurrencyRepository
+
 
 class MainActivity : RevBaseActivity(), ICurrencyRecyclerAdapterListener {
     private lateinit var viewModel: RevCurrencyViewModel

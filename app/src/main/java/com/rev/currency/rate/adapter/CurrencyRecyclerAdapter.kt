@@ -63,7 +63,7 @@ class CurrencyRecyclerAdapter(private var currencies: MutableList<ExchangeRateIt
         init {
             v.setOnClickListener(moveToTop())
 
-            editTextPrice?.setOnKeyListener(View.OnKeyListener { v, keyCode, event ->
+            editTextPrice.setOnKeyListener(View.OnKeyListener { v, keyCode, event ->
                 if (keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_UP) {
                     //Perform Code
                     return@OnKeyListener true
