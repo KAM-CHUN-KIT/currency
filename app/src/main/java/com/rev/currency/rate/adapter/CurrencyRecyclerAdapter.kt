@@ -9,13 +9,24 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
+import android.widget.LinearLayout
+import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.rev.currency.R
 import com.rev.currency.rate.model.ExchangeRateItem
 
 class CurrencyRecyclerAdapter(private var currencies: MutableList<ExchangeRateItem>,
-                              private var listener: ICurrencyRecyclerAdapterListener): RecyclerView.Adapter<CurrencyRecyclerAdapter.CurrencyHolder>()  {
+                              private var listener: ICurrencyRecyclerAdapterListener): RecyclerView.Adapter<CurrencyRecyclerAdapter.CurrencyHolder>(), TextWatcher  {
+    override fun afterTextChanged(p0: Editable?) {
+        listener.onPriceInput(currencies[0].currency, p0.toString()) // allow position to edit input only
+    }
+
+    override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+    }
+
+    override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+    }
 
     override fun getItemCount(): Int {
         return currencies.size
@@ -23,12 +34,16 @@ class CurrencyRecyclerAdapter(private var currencies: MutableList<ExchangeRateIt
 
     override fun onBindViewHolder(holder: CurrencyHolder, position: Int) {
         val rate = currencies[position]
+        holder.editTextPrice.removeTextChangedListener(this)
+
         holder.textCurrency.text = rate.currency.name
         holder.textCurrecnyAlias.text = rate.currency.name //show dummy test as no alias from API side
         holder.editTextPrice.text = Editable.Factory.getInstance().newEditable(rate.displayPrice)
         holder.editTextPrice.isEnabled = position == 0
         if (position == 0) {
             holder.editTextPrice.requestFocus()
+            //only get first item input text
+            holder.editTextPrice.addTextChangedListener(this)
         }
     }
 
@@ -47,21 +62,6 @@ class CurrencyRecyclerAdapter(private var currencies: MutableList<ExchangeRateIt
 
         init {
             v.setOnClickListener(moveToTop())
-
-            //only get first item input text
-            editTextPrice.addTextChangedListener(object : TextWatcher {
-                override fun afterTextChanged(p0: Editable?) {
-                    if (layoutPosition == 0) { // afterTextChanged also be triggered when editText setText, simply guard check position index in here
-                        listener.onPriceInput(currencies[layoutPosition].currency, p0.toString())
-                    }
-                }
-
-                override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                }
-
-                override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                }
-            })
 
             editTextPrice?.setOnKeyListener(View.OnKeyListener { v, keyCode, event ->
                 if (keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_UP) {

@@ -59,9 +59,6 @@ class MainActivity : RevBaseActivity(), ICurrencyRecyclerAdapterListener {
 
     override fun onPriceInput(base: CurrencyType, input: String) {
         super.onPriceInput(base, input)
-        val r = Runnable {
-            viewModel.updateCurrencyBasePrice(base, input)
-        }
-        Handler().postDelayed(r, 200)
+        viewModel.updateCurrencyBasePrice(base, input)
     }
 }
