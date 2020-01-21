@@ -39,11 +39,11 @@ The following diagram shows the flow how it works in the project:
 <img src="screenshot/1369.t.gif" width="350" height="550">
 
 # TDD Test Case
-In this example, we added several Test Driven Development (TDD) test cases for some simple checking of UI and view model. 
+In this example, implement Test Driven Development (TDD) test cases for checking of ViewModel and LiveData. 
 
 
 # Library Used:
 Dagger2 (Dependency Injection)
 Fuel (Network Library)
 RxJava2 (Data binding)
-Mockito-Kotlin (Unit Test)
+Mockito (Unit Test)
