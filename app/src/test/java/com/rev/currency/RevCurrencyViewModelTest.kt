@@ -11,8 +11,11 @@ import org.junit.Assert
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import org.mockito.ArgumentCaptor
 import org.mockito.Mock
 import org.mockito.Mockito
+import org.mockito.Mockito.times
+import org.mockito.Mockito.verify
 import java.math.BigDecimal
 
 class RevCurrencyViewModelTest {
@@ -37,17 +40,26 @@ class RevCurrencyViewModelTest {
     }
 
     @Test
-    fun `test when fetchLatest resultDisposable not null`() {
-        viewModel.getLatest(CurrencyType.EUR)
-        Assert.assertNull(viewModel.currency.value)
-    }
-
-    @Test
     fun `test when updateExchangeRate`() {
-        val mockCurrency = Currency(CurrencyType.EUR.name, "2018-11-11")
+        val mockCurrency = Currency(CurrencyType.EUR.name, "2018-11-11", hashMapOf(CurrencyType.USD to BigDecimal("1.2345"), CurrencyType.HKD to BigDecimal("9.8765")))
 
+        val mockInput = mutableListOf(
+            ExchangeRateItem(CurrencyType.USD, BigDecimal("1.1587")),
+            ExchangeRateItem(CurrencyType.HKD, BigDecimal("9.0953"))
+        )
+
+        val expectedOutput = mutableListOf(
+            ExchangeRateItem(CurrencyType.USD, BigDecimal("1.2345")),
+            ExchangeRateItem(CurrencyType.HKD, BigDecimal("9.8765"))
+        )
+        viewModel.currencyList.value = mockInput
         viewModel.updateExchangeRate(mockCurrency)
-        Assert.assertNull(viewModel.currencyList.value)
+
+        val captor = ArgumentCaptor.forClass(MutableList::class.java)
+        captor.run {
+            verify(currencyListObserver, times(2)).onChanged(capture() as? MutableList<ExchangeRateItem>)
+            Assert.assertEquals(expectedOutput, value)
+        }
     }
 
     @Test
@@ -57,18 +69,30 @@ class RevCurrencyViewModelTest {
         Assert.assertEquals(list, viewModel.currencyList.value)
     }
 
-//    @Test
-//    fun `test when updateCurrencyBasePrice`() {
-//        val expectedResult = Currency(CurrencyType.EUR.name, "2018-11-11")
-//
-//        viewModel.updateCurrencyBasePrice(CurrencyType.EUR, "100")
-//
-//        val captor = ArgumentCaptor.forClass(MutableList<ExchangeRateItem>::class.java)
-//        captor.run {
-//            verify(currencyListObserver, times(1)).onChanged(capture())
-//            Assert.assertEquals(expectedResult, value)
-//        }
-//    }
+    @Test
+    fun `test when updateCurrencyBasePrice by 100 EUR`() {
+        val baseCurrencyPrice = "100"
+
+        val mockInput = mutableListOf(
+            ExchangeRateItem(CurrencyType.USD, BigDecimal("1.1587")),
+            ExchangeRateItem(CurrencyType.HKD, BigDecimal("9.0953"))
+        )
+
+        val expectedOutput = mutableListOf(
+            ExchangeRateItem(CurrencyType.USD, BigDecimal("1.1587"), baseExchangeRate = BigDecimal.ONE, basePrice = BigDecimal(baseCurrencyPrice)),
+            ExchangeRateItem(CurrencyType.HKD, BigDecimal("9.0953"), baseExchangeRate = BigDecimal.ONE, basePrice = BigDecimal(baseCurrencyPrice))
+        )
+        viewModel.currencyList.value = mockInput
+        viewModel.updateCurrencyBasePrice(CurrencyType.EUR, baseCurrencyPrice)
+
+        val captor = ArgumentCaptor.forClass(MutableList::class.java)
+        captor.run {
+            verify(currencyListObserver, times(2)).onChanged(capture() as? MutableList<ExchangeRateItem>)
+            Assert.assertEquals(expectedOutput, value)
+            Assert.assertEquals(expectedOutput[0].displayPrice, "115.87")
+            Assert.assertEquals(expectedOutput[1].displayPrice, "909.53")
+        }
+    }
 
     inline fun <reified T> mock(): T = Mockito.mock(T::class.java)
 }
