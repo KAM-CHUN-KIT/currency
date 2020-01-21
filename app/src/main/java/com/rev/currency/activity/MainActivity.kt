@@ -40,7 +40,7 @@ class MainActivity : RevBaseActivity(), ICurrencyRecyclerAdapterListener {
     private fun fetchData(){
         viewModel.startRunnable()
         viewModel.currency.observe(this, Observer { currency ->
-            viewModel.updateExchangeRate()
+            viewModel.updateExchangeRate(currency)
         })
 
         viewModel.currencyList.observe(this, Observer { currencyList ->

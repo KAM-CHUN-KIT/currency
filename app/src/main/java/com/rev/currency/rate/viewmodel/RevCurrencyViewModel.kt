@@ -40,17 +40,15 @@ class RevCurrencyViewModel(private val currencylistRepository: RevCurrencyReposi
         runnable?.run()
     }
 
-    fun updateExchangeRate() {
-        currency.value?.let { base ->
-            currencyList.value?.let { rates ->
-                var list = mutableListOf<ExchangeRateItem>()
-                for (rate in rates) {
-                    val newRate = base.rates[rate.currency] ?: rate.rate
-                    val r = ExchangeRateItem(rate.currency, newRate, rate.baseExchangeRate, rate.basePrice)
-                    list.add(r)
-                }
-                currencyList.value = list
+    fun updateExchangeRate(base: Currency) {
+        currencyList.value?.let { rates ->
+            var list = mutableListOf<ExchangeRateItem>()
+            for (rate in rates) {
+                val newRate = base.rates[rate.currency] ?: rate.rate
+                val r = ExchangeRateItem(rate.currency, newRate, rate.baseExchangeRate, rate.basePrice)
+                list.add(r)
             }
+            currencyList.value = list
         }
     }
 
@@ -76,7 +74,7 @@ class RevCurrencyViewModel(private val currencylistRepository: RevCurrencyReposi
 
 
     //API call
-    private fun getLatest(currencyKey: CurrencyType) {
+    fun getLatest(currencyKey: CurrencyType) {
         resultDisposable = currencylistRepository.getLatest(currencyKey)?.subscribe { result ->
             val (data, err) = result
             data?.let { data ->
