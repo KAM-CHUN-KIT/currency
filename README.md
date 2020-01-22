@@ -36,7 +36,7 @@ The following diagram shows the flow how it works in the project:
 
 
 # Preview
-<img src="screenshot/ezgif-7-cc1a8fbf8587.gif" width="350" height="550">
+<img src="screenshot/ezgif-7-cc1a8fbf8587.gif" width="350">
 
 # TDD Test Case
 In this example, implement Test Driven Development (TDD) test cases for checking of ViewModel and LiveData. 
