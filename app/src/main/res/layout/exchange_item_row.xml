@@ -2,7 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="72dp">
+        android:layout_height="72dp"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <RelativeLayout
             android:layout_width="wrap_content"
@@ -10,21 +11,34 @@
             android:layout_centerVertical="true"
             android:layout_marginStart="20dp">
 
-        <ImageView
-                android:id="@+id/image_currency"
+        <androidx.cardview.widget.CardView
+                android:id="@+id/cardview"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:layout_centerVertical="true"
-                android:src="@mipmap/ic_launcher" />
+                android:innerRadius="0dp"
+                android:background="@android:color/transparent"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="0dp"
+                app:cardPreventCornerOverlap="true"
+                android:layout_centerVertical="true">
+
+            <ImageView
+                    android:id="@+id/image_currency"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="center"
+                    tools:src="@drawable/ic_aud" />
+        </androidx.cardview.widget.CardView>
 
         <TextView
                 android:id="@+id/text_currency"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="9dp"
-                android:layout_toRightOf="@+id/image_currency"
+                android:layout_toRightOf="@+id/cardview"
                 android:textColor="@color/black"
-                android:textSize="16dp"
+                android:textSize="16sp"
+                android:textStyle="bold"
                 tools:text="EUR" />
 
         <TextView
@@ -33,9 +47,9 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/text_currency"
                 android:layout_marginLeft="9dp"
-                android:layout_toRightOf="@+id/image_currency"
+                android:layout_toRightOf="@+id/cardview"
                 android:textColor="#8B959E"
-                android:textSize="14dp"
+                android:textSize="14sp"
                 tools:text="EURO" />
     </RelativeLayout>
 
